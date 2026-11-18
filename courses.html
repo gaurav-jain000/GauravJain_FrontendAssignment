@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClassIQ - Courses</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-[#F5F5F5] text-black font-sans antialiased">
+    <!-- Shared Navbar Mount -->
+    <div id="navbar-slot"></div>
+
+    <main class="mx-auto max-w-7xl max-xl:px-4 py-8">
+      <!-- Hero Banner -->
+      <section
+        class="relative bg-[#ECEDEF] rounded-[22px] min-h-[260px] p-8 md:p-12 flex items-start overflow-hidden"
+      >
+        <!-- Banner Title -->
+        <h1 class="relative z-10 text-xl md:text-2xl font-bold text-black">
+          Enroll in Your Fav Courses
+        </h1>
+
+        <!-- Character Illustration Placeholder (Replace src with your avatar image) -->
+        <img
+          src="assets/images/courses-hero.png"
+          alt="Student with laptop"
+          onerror="this.style.display = 'none'"
+          class="absolute right-6 md:right-12 bottom-0 w-44 md:w-56 object-contain pointer-events-none select-none"
+        />
+      </section>
+
+      <!-- All Courses Section -->
+      <section class="mt-12">
+        <div class="flex items-center gap-2 mb-7">
+          <h2 class="text-xl md:text-2xl font-bold text-[#333333]">
+            All Courses
+          </h2>
+          <!-- Forward Curved Arrow Icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-5 h-5 text-[#333333]"
+          >
+            <path
+              d="M14 5v4.06C7.55 9.57 4.46 13.79 3 19c2.5-3.44 6.13-5.06 11-5.06V18l7-6.5L14 5z"
+            />
+          </svg>
+        </div>
+
+        <!-- 3-Column Courses Grid -->
+        <div
+          id="courses-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <!-- Course Card 1 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Development
+              </span>
+              <h3 class="text-lg font-bold text-black">
+                Web Development Bootcamp
+              </h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Master HTML, Tailwind CSS, and modern JavaScript from scratch.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+
+          <!-- Course Card 2 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Design
+              </span>
+              <h3 class="text-lg font-bold text-black">
+                UI/UX Design Essentials
+              </h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Learn wireframing, prototyping, and clean interface systems.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+
+          <!-- Course Card 3 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Programming
+              </span>
+              <h3 class="text-lg font-bold text-black">Python for Beginners</h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Build real-world scripts, automation tools, and core logic.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+
+          <!-- Course Card 4 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Data
+              </span>
+              <h3 class="text-lg font-bold text-black">
+                Data Structures & Algorithms
+              </h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Strengthen problem-solving skills for technical interviews.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+
+          <!-- Course Card 5 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Backend
+              </span>
+              <h3 class="text-lg font-bold text-black">Node.js & REST APIs</h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Create fast, scalable backend services and databases.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+
+          <!-- Course Card 6 -->
+          <div
+            class="bg-[#ECEDEF] rounded-[20px] aspect-square p-6 flex flex-col justify-between hover:ring-2 hover:ring-black transition-all"
+          >
+            <div>
+              <span
+                class="inline-block bg-[#C2F578] text-black text-xs font-bold px-3 py-1 rounded-full mb-3"
+              >
+                Frontend
+              </span>
+              <h3 class="text-lg font-bold text-black">React Fundamentals</h3>
+              <p class="text-sm text-neutral-600 mt-2">
+                Build interactive component-driven web applications.
+              </p>
+            </div>
+            <button
+              class="bg-[#C2F578] hover:bg-[#b5eb67] transition-colors cursor-pointer font-semibold text-sm rounded-lg py-2.5 px-4 w-full"
+            >
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Shared Footer Mount -->
+    <div id="footer-slot"></div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
