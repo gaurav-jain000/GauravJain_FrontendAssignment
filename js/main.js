@@ -1,39 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Course Enrollment Toggle (Persisted in localStorage)
-  const enrollButtons = document.querySelectorAll(".enroll-btn");
-  if (enrollButtons.length) {
-    const enrolled = JSON.parse(
-      localStorage.getItem("classiq_enrolled") || "[]",
-    );
-
-    function renderEnrollBtn(btn, isEnrolled) {
-      btn.textContent = isEnrolled ? "Enrolled ✓" : "Enroll Now";
-      btn.classList.toggle("bg-black", isEnrolled);
-      btn.classList.toggle("text-white", isEnrolled);
-      btn.classList.toggle("hover:bg-black/80", isEnrolled);
-      btn.classList.toggle("bg-[#C2F578]", !isEnrolled);
-      btn.classList.toggle("text-black", !isEnrolled);
-      btn.classList.toggle("hover:bg-[#b5eb67]", !isEnrolled);
-    }
-
-    enrollButtons.forEach((btn) => {
-      const courseId = btn.dataset.course;
-      renderEnrollBtn(btn, enrolled.includes(courseId));
-
-      btn.addEventListener("click", () => {
-        const idx = enrolled.indexOf(courseId);
-        if (idx === -1) {
-          enrolled.push(courseId);
-        } else {
-          enrolled.splice(idx, 1);
-        }
-        localStorage.setItem("classiq_enrolled", JSON.stringify(enrolled));
-        renderEnrollBtn(btn, idx === -1);
-      });
-    });
-  }
-
-  // Highlight active nav link
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("[data-nav]").forEach((link) => {
     if (link.getAttribute("data-nav") === currentPath) {
@@ -42,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Mobile Hamburger Toggle
   const menuBtn = document.getElementById("mobile-menu-btn");
   const mobileMenu = document.getElementById("mobile-menu");
   const iconOpen = document.getElementById("menu-icon-open");
@@ -50,79 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (menuBtn && mobileMenu) {
     menuBtn.addEventListener("click", () => {
-      const isExpanded = !mobileMenu.classList.toggle("hidden");
-      menuBtn.setAttribute("aria-expanded", String(isExpanded));
-      iconOpen.classList.toggle("hidden", isExpanded);
-      iconClose.classList.toggle("hidden", !isExpanded);
+      const isOpen = !mobileMenu.classList.toggle("hidden");
+      menuBtn.setAttribute("aria-expanded", isOpen);
+      iconOpen.classList.toggle("hidden", isOpen);
+      iconClose.classList.toggle("hidden", !isOpen);
     });
   }
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-  // Newsletter Subscribe Form
-  const newsletterForm = document.getElementById("newsletterForm");
-  if (newsletterForm) {
-    const newsletterInput = document.getElementById("newsletterEmail");
-    const newsletterBtn = document.getElementById("newsletterBtn");
-    const newsletterError = document.getElementById("newsletterError");
-
-    const checkTickSvg = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  `;
-
-    function setNewsletterError(msg) {
-      if (!newsletterError) return;
-      newsletterError.textContent = msg;
-      newsletterError.classList.toggle("hidden", !msg);
-      newsletterForm.classList.toggle("border-red-600", Boolean(msg));
-      newsletterForm.classList.toggle("border-gray-100", !msg);
-    }
-
-    newsletterInput.addEventListener("input", () => {
-      setNewsletterError("");
-      if (newsletterBtn.dataset.subscribed === "true") {
-        newsletterBtn.dataset.subscribed = "false";
-        newsletterBtn.innerHTML = "Subscribe";
-        newsletterBtn.classList.remove(
-          "bg-black",
-          "text-white",
-          "hover:bg-black/80",
-        );
-        newsletterBtn.classList.add(
-          "bg-[#C2F578]",
-          "text-black",
-          "hover:bg-[#C2F578]/80",
-        );
-      }
-    });
-
-    newsletterForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const emailVal = newsletterInput.value.trim();
-
-      if (!emailRegex.test(emailVal)) {
-        setNewsletterError("Enter a valid email address.");
-        return;
-      }
-
-      setNewsletterError("");
-      newsletterInput.value = "";
-      newsletterBtn.dataset.subscribed = "true";
-      newsletterBtn.innerHTML = `<span>Subscribed</span>${checkTickSvg}`;
-      newsletterBtn.classList.remove(
-        "bg-[#C2F578]",
-        "text-black",
-        "hover:bg-[#C2F578]/80",
-      );
-      newsletterBtn.classList.add(
-        "bg-black",
-        "text-white",
-        "hover:bg-black/80",
-      );
-    });
-  }
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  const passwordHint =
+    "Use 8+ chars with uppercase, lowercase, number & special character.";
 
   function setError(input, errorEl, msg) {
     errorEl.textContent = msg;
@@ -131,7 +34,71 @@ document.addEventListener("DOMContentLoaded", () => {
     input.classList.toggle("border-black", !msg);
   }
 
-  // Login Form
+  function showToast(msg, isError = false) {
+    document.getElementById("app-toast")?.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "app-toast";
+    toast.className = `fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-semibold ${
+      isError ? "bg-red-600 text-white" : "bg-black text-[#C2F578]"
+    }`;
+    toast.textContent = isError ? `✕ ${msg}` : `✓ ${msg}`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3500);
+  }
+
+  async function hashPassword(str) {
+    const buf = await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(str),
+    );
+    return [...new Uint8Array(buf)]
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  // Newsletter form
+  const newsletterForm = document.getElementById("newsletterForm");
+  if (newsletterForm) {
+    const email = document.getElementById("newsletterEmail");
+    const btn = document.getElementById("newsletterBtn");
+    const err = document.getElementById("newsletterError");
+    const tick = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+
+    function setSubscribed(done) {
+      btn.dataset.subscribed = done;
+      btn.innerHTML = done ? `<span>Subscribed</span>${tick}` : "Subscribe";
+      btn.classList.toggle("bg-black", done);
+      btn.classList.toggle("text-white", done);
+      btn.classList.toggle("hover:bg-black/80", done);
+      btn.classList.toggle("bg-[#C2F578]", !done);
+      btn.classList.toggle("text-black", !done);
+      btn.classList.toggle("hover:bg-[#C2F578]/80", !done);
+    }
+
+    email.addEventListener("input", () => {
+      if (err) err.classList.add("hidden");
+      newsletterForm.classList.remove("border-red-600");
+      if (btn.dataset.subscribed === "true") setSubscribed(false);
+    });
+
+    newsletterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!emailRegex.test(email.value.trim())) {
+        if (err) {
+          err.textContent = "Enter a valid email address.";
+          err.classList.remove("hidden");
+        }
+        newsletterForm.classList.add("border-red-600");
+        return;
+      }
+      email.value = "";
+      setSubscribed(true);
+    });
+  }
+
+  // Login form
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     const email = document.getElementById("login-email");
@@ -144,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setError(password, passwordErr, ""),
     );
 
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let ok = true;
 
@@ -152,17 +119,27 @@ document.addEventListener("DOMContentLoaded", () => {
         setError(email, emailErr, "Enter a valid email address.");
         ok = false;
       }
-
-      if (!password.value) {
-        setError(password, passwordErr, "Password is required.");
+      if (!passwordRegex.test(password.value)) {
+        setError(password, passwordErr, passwordHint);
         ok = false;
       }
+      if (!ok) {
+        showToast("Login failed. Please fix the errors.", true);
+        return;
+      }
 
-      if (ok) window.location.href = "index.html";
+      const passwordHash = await hashPassword(password.value);
+      localStorage.setItem(
+        "classiq_last_login",
+        JSON.stringify({ email: email.value.trim(), passwordHash }),
+      );
+
+      loginForm.reset();
+      showToast("Logged in successfully!");
     });
   }
 
-  // SignUp Form
+  // SignUp form
   const signupForm = document.getElementById("signup-form");
   if (signupForm) {
     const email = document.getElementById("signup-email");
@@ -180,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setError(password, passwordErr, ""),
     );
 
-    signupForm.addEventListener("submit", (e) => {
+    signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let ok = true;
 
@@ -188,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setError(email, emailErr, "Enter a valid email address.");
         ok = false;
       }
-
       if (fullname.value.trim().length < 3) {
         setError(
           fullname,
@@ -197,17 +173,26 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         ok = false;
       }
-
-      if (password.value.length < 8 || !/\d/.test(password.value)) {
-        setError(
-          password,
-          passwordErr,
-          "Use 8+ characters with at least one number.",
-        );
+      if (!passwordRegex.test(password.value)) {
+        setError(password, passwordErr, passwordHint);
         ok = false;
       }
+      if (!ok) {
+        showToast("Sign up failed. Please check your inputs.", true);
+        return;
+      }
 
-      if (ok) window.location.href = "login.html";
+      const passwordHash = await hashPassword(password.value);
+      const users = JSON.parse(localStorage.getItem("classiq_users") || "[]");
+      users.push({
+        email: email.value.trim(),
+        fullname: fullname.value.trim(),
+        passwordHash,
+      });
+      localStorage.setItem("classiq_users", JSON.stringify(users));
+
+      signupForm.reset();
+      showToast("Account created successfully!");
     });
   }
 });
