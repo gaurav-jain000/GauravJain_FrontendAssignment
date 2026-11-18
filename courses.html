@@ -412,6 +412,7 @@
             </p>
             <form
               id="newsletterForm"
+              novalidate
               class="flex items-center bg-white p-1.5 rounded-lg shadow-sm border border-gray-100 w-full"
             >
               <input
@@ -423,11 +424,16 @@
               />
               <button
                 type="submit"
-                class="shrink-0 bg-[#C2F578] hover:bg-[#C2F578]/80 text-black text-sm sm:text-base font-semibold px-3 sm:px-4 py-2 rounded-md transition cursor-pointer"
+                id="newsletterBtn"
+                class="shrink-0 inline-flex items-center gap-1.5 bg-[#C2F578] hover:bg-[#C2F578]/80 text-black text-sm sm:text-base font-semibold px-3 sm:px-4 py-2 rounded-md transition cursor-pointer"
               >
                 Subscribe
               </button>
             </form>
+            <p
+              id="newsletterError"
+              class="text-red-600 text-xs font-semibold mt-1.5 hidden"
+            ></p>
           </div>
 
           <div>

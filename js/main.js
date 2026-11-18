@@ -59,6 +59,71 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+  // Newsletter Subscribe Form
+  const newsletterForm = document.getElementById("newsletterForm");
+  if (newsletterForm) {
+    const newsletterInput = document.getElementById("newsletterEmail");
+    const newsletterBtn = document.getElementById("newsletterBtn");
+    const newsletterError = document.getElementById("newsletterError");
+
+    const checkTickSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  `;
+
+    function setNewsletterError(msg) {
+      if (!newsletterError) return;
+      newsletterError.textContent = msg;
+      newsletterError.classList.toggle("hidden", !msg);
+      newsletterForm.classList.toggle("border-red-600", Boolean(msg));
+      newsletterForm.classList.toggle("border-gray-100", !msg);
+    }
+
+    newsletterInput.addEventListener("input", () => {
+      setNewsletterError("");
+      if (newsletterBtn.dataset.subscribed === "true") {
+        newsletterBtn.dataset.subscribed = "false";
+        newsletterBtn.innerHTML = "Subscribe";
+        newsletterBtn.classList.remove(
+          "bg-black",
+          "text-white",
+          "hover:bg-black/80",
+        );
+        newsletterBtn.classList.add(
+          "bg-[#C2F578]",
+          "text-black",
+          "hover:bg-[#C2F578]/80",
+        );
+      }
+    });
+
+    newsletterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const emailVal = newsletterInput.value.trim();
+
+      if (!emailRegex.test(emailVal)) {
+        setNewsletterError("Enter a valid email address.");
+        return;
+      }
+
+      setNewsletterError("");
+      newsletterInput.value = "";
+      newsletterBtn.dataset.subscribed = "true";
+      newsletterBtn.innerHTML = `<span>Subscribed</span>${checkTickSvg}`;
+      newsletterBtn.classList.remove(
+        "bg-[#C2F578]",
+        "text-black",
+        "hover:bg-[#C2F578]/80",
+      );
+      newsletterBtn.classList.add(
+        "bg-black",
+        "text-white",
+        "hover:bg-black/80",
+      );
+    });
+  }
+
   function setError(input, errorEl, msg) {
     errorEl.textContent = msg;
     errorEl.classList.toggle("hidden", !msg);
